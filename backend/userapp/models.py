@@ -4,9 +4,35 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
+#---------------------------- Achievement Model
+class Achievement(models.Model):
+    achievement = models.CharField(max_length=150, unique=False, blank=True)
+    def __str__(self):
+        return self.achievement
+
+
+#---------------------------- Education Model
+class Education(models.Model):
+    education = models.CharField(max_length=150, unique=False, blank=True)
+    def __str__(self):
+        return self.education
+
+#---------------------------- Work Experience Model
+class Work_Experience(models.Model):
+    work_experience = models.CharField(max_length=150, unique=False, blank=True)
+    def __str__(self):
+        return self.work_experience
+
+#---------------------------- Skills Model
+class Skills(models.Model):
+    skills = models.CharField(max_length=150, unique=False, blank=True)
+    def __str__(self):
+        return self.skills
+
+
 #--------------- Research Interests Model
 class Research_Interest(models.Model):
-    research_interests = models.CharField(max_length=20, unique=True)
+    research_interests = models.CharField(max_length=20, unique=False)
 
     def __str__(self):
         return self.research_interests
@@ -15,7 +41,7 @@ class Research_Interest(models.Model):
 
 #---------------------------- Tag Model
 class Tag(models.Model):
-    tag = models.CharField(max_length=20, unique=True)
+    tag = models.CharField(max_length=20, unique=False)
 
     def __str__(self):
         return self.tag
@@ -39,18 +65,30 @@ class User(AbstractUser):
         ('OTHER', 'Other'),
     ]
 
+    username = models.CharField(max_length=20, unique=True, blank=False)
+    email = models.EmailField(unique=True, blank=True)
+
+    first_name = None
+    last_name = None
+    groups = None 
+    user_permissions = None
+    
+
     full_name = models.CharField(max_length=50, blank=True)
     bio = models.TextField(max_length=200, blank=True)
     profile_pic = models.ImageField(upload_to='user_profile_pics/', blank=True)
-    location = models.ManyToManyField(Location, blank=True)
-    gender = models.CharField(max_length=15,choices=GENDER_CHOICE, blank=True)
-    education = models.CharField(max_length=50, blank=True)
-    achievements = models.CharField(max_length=50, blank=True)
-    work_experience = models.CharField(max_length=50, blank=True)
+    location = models.ForeignKey(Location, blank=True, null=True, on_delete=models.CASCADE)
+    gender = models.CharField(max_length=15, choices=GENDER_CHOICE, blank=True)
+    education = models.ManyToManyField(Education, blank=True)
+    achievements = models.ManyToManyField(Achievement, blank=True)
+    work_experience = models.ManyToManyField(Work_Experience, blank=True)
+    skills = models.ManyToManyField(Skills, blank=True)
     research_interest = models.ManyToManyField(Research_Interest, blank=True, related_name='users')
-    skilled_with = models.CharField(max_length=50, blank=True)
-    publications = models.ManyToManyField('Publication', related_name='users')
+    publications = models.ManyToManyField('Publication',related_name='users', blank=True)
     joined_at = models.DateTimeField(auto_now_add=True)
+
+    USERNAME_FIELD = 'username' # The field to use as the unique identifier for authentication
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.username
@@ -74,8 +112,7 @@ class Publication(models.Model):
         ('OTHER', 'Other'),
     ]
 
-    title = models.CharField(max_length=300)
-    authors = models.ManyToManyField(User, related_name='authors')
+    title = models.CharField(max_length=300, unique=False)
     publication_type = models.CharField(max_length=15,choices=PUBLICATION_TYPE_CHOICE, default='JOURNAL')
     tags = models.ManyToManyField(Tag, related_name='publications')
     description = models.TextField(max_length=250)
