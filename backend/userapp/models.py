@@ -4,33 +4,33 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-#---------------------------- Achievement Model
+#1.---------------------------- Achievement Model
 class Achievement(models.Model):
     achievement = models.CharField(max_length=150, unique=False, blank=True)
     def __str__(self):
         return self.achievement
 
 
-#---------------------------- Education Model
+#2.---------------------------- Education Model
 class Education(models.Model):
     education = models.CharField(max_length=150, unique=False, blank=True)
     def __str__(self):
         return self.education
 
-#---------------------------- Work Experience Model
+#3.---------------------------- Work Experience Model
 class Work_Experience(models.Model):
     work_experience = models.CharField(max_length=150, unique=False, blank=True)
     def __str__(self):
         return self.work_experience
 
-#---------------------------- Skills Model
+#4.---------------------------- Skills Model
 class Skills(models.Model):
     skills = models.CharField(max_length=150, unique=False, blank=True)
     def __str__(self):
         return self.skills
 
 
-#--------------- Research Interests Model
+#5.--------------- Research Interests Model
 class Research_Interest(models.Model):
     research_interests = models.CharField(max_length=20, unique=False)
 
@@ -39,7 +39,7 @@ class Research_Interest(models.Model):
 
 
 
-#---------------------------- Tag Model
+#6.---------------------------- Tag Model
 class Tag(models.Model):
     tag = models.CharField(max_length=20, unique=False)
 
@@ -47,7 +47,7 @@ class Tag(models.Model):
         return self.tag
 
 
-#-------------------------------- Location Model
+#7.-------------------------------- Location Model
 class Location(models.Model):
     location = models.CharField(max_length=50, unique=True)
 
@@ -57,7 +57,7 @@ class Location(models.Model):
 
 
 
-#-------------------------------- User Model
+#8.-------------------------------- User Model
 class User(AbstractUser):
     GENDER_CHOICE = [
         ('MALE', 'Male'),
@@ -94,7 +94,7 @@ class User(AbstractUser):
         return self.username
 
 
-#-------------------------------- Publication Model
+#9.-------------------------------- Publication Model
 class Publication(models.Model):
     STATUS_CHOICE = [
         ('PUBLISHED', 'Published'),
